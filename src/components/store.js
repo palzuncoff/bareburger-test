@@ -1,36 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DAYS } from '../constants'
-
-function renderWorkTime({ from, to }) {
-    return <p>from: {from} - to: {to}</p>;
-}
+import Schedule from './schedule';
 
 class Store extends Component {
-    renderSchedule = () => {
-        const { schedule } = this.props;
-        return DAYS.map(day => {
-            if (schedule[day]) {
-                return (
-                    <li>
-                        <p><span>{day}:</span> {schedule[day].map(renderWorkTime)}</p>
-                    </li>
-                )
-            }
-            return (
-                <li>
-                    <p>{day}: not working</p>
-                </li>
-            )
-        })
-    }
     render() {
         return (
             <div>
                 <h1>{this.props.name}</h1>
                 <div>Store is open / will open in 20 min</div>
                 <ul>
-                    {this.renderSchedule()}
+                    {<Schedule schedule={this.props.schedule}/>}
                 </ul>
             </div>
         )
