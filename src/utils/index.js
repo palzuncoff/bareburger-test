@@ -40,3 +40,15 @@ export function getHumanReadableSchedule(ISchedule) {
         return acc;
     }, [])
 }
+
+function inRange({ from, to }) {
+    const arrFrom = from.split(':')
+    const arrTo = to.split(':')
+    return moment().isBetween(moment({ hour:arrFrom[0], minute:arrFrom[1] }), moment({ hour:arrTo[0], minute:arrTo[1] }));
+}
+
+export function isInWorkingHours(ISchedule) {
+    const currentDay = DAYS[moment().day() - 1];
+    console.log(ISchedule[currentDay].some(inRange));
+    return ISchedule[currentDay].some(inRange);
+}

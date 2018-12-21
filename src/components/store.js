@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Schedule from './schedule';
+import OpenIndicator from './open-indicator'
 
 class Store extends Component {
     render() {
         return (
             <div>
                 <h1>{this.props.name}</h1>
-                <div>Store is open / will open in 20 min</div>
+                <div>Store is <OpenIndicator schedule={this.props.schedule}/> will open in 20 min</div>
                 <ul>
                     {<Schedule schedule={this.props.schedule}/>}
                 </ul>
