@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DAYS } from '../constants';
+import { DAYS, DAYS_READABLE } from '../constants';
 
 function scheduleHoursRange(day) {
     if (!day) {
@@ -9,6 +9,19 @@ function scheduleHoursRange(day) {
     const arrFrom = from.split(':')
     const arrTo = to.split(':')
     return `${moment({ hour:arrFrom[0], minute:arrFrom[1] }).format('LT')} - ${moment({ hour:arrTo[0], minute:arrTo[1] }).format('LT')}`
+}
+
+function inRange({ from, to }) {
+    const arrFrom = from.split(':')
+    const arrTo = to.split(':')
+    return moment().isBetween(moment({ hour:arrFrom[0], minute:arrFrom[1] }), moment({ hour:arrTo[0], minute:arrTo[1] }));
+}
+
+function getFirstWorkDay(ISchedule) {
+    const entries = Object.entries(ISchedule);
+    const dayName = DAYS_READABLE[entries[0][0]]
+    const time = entries[0][1][0].from.split(':')
+    return `${dayName} at ${moment({ hour:time[0], minute:time[1] }).format('LT')}`
 }
 
 export function getHumanReadableSchedule(ISchedule) {
@@ -41,13 +54,32 @@ export function getHumanReadableSchedule(ISchedule) {
     }, [])
 }
 
-function inRange({ from, to }) {
-    const arrFrom = from.split(':')
-    const arrTo = to.split(':')
-    return moment().isBetween(moment({ hour:arrFrom[0], minute:arrFrom[1] }), moment({ hour:arrTo[0], minute:arrTo[1] }));
-}
-
 export function isInWorkingHours(ISchedule) {
     const currentDay = DAYS[moment().day() - 1];
     return ISchedule[currentDay] && ISchedule[currentDay].some(inRange);
+}
+
+export function getHumanReadableNextWorkingHours(ISchedule) {
+    if (!isInWorkingHours(ISchedule)) {
+        const restDays = () => {
+            const dayIndex = moment().day() - 1
+            return DAYS.slice(dayIndex)
+        };
+        const result = restDays().reduce((acc, day, index, days) => {
+            if (ISchedule[day]) {
+                acc.push(ISchedule[day])
+                return acc;
+            }
+            const nextWorkDay = days.find(day => !!ISchedule[day])
+            if (nextWorkDay) {
+                return acc;
+            }
+            acc = `Next week on ${getFirstWorkDay(ISchedule)}`
+            return acc;
+        }, '');
+
+        return result;
+    }
+
+    return '';
 }
