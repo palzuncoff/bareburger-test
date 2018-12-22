@@ -14,7 +14,7 @@ class Schedule extends Component {
             return (
                 <ul>
                     {humanReadable.map(schedule => (
-                        <li>{schedule}</li>
+                        <li key={schedule} >{schedule}</li>
                     ))}
                 </ul>
             )

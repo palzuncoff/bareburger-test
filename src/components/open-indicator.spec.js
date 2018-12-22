@@ -12,12 +12,19 @@ describe('OpenIndicator', () => {
     }
     it('should show open', () => {
         const component = setUp({ schedule: {
-            mon: [{ from: '10:00', to: '23:00' }],
-            tue: [{ from: '10:00', to: '23:00' }],
-            wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
-            thu: [{ from: '11:00', to: '23:00' }],
-            fri: [{ from: '12:00', to: '23:00' }],
+            mon: [{ from: '00:00', to: '23:59' }],
+            tue: [{ from: '00:00', to: '23:59' }],
+            wed: [{ from: '00:00', to: '23:59' }],
+            thu: [{ from: '00:00', to: '23:59' }],
+            fri: [{ from: '00:00', to: '23:59' }],
+            sat: [{ from: '00:00', to: '23:59' }],
+            sun: [{ from: '00:00', to: '23:59' }],
         }})
         expect(component.text()).toEqual('open')
-    })
+    });
+    it('should show close', () => {
+        const component = setUp({ schedule: {
+        }})
+        expect(component.text()).toEqual('closed')
+    });
 })

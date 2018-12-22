@@ -49,6 +49,5 @@ function inRange({ from, to }) {
 
 export function isInWorkingHours(ISchedule) {
     const currentDay = DAYS[moment().day() - 1];
-    console.log(ISchedule[currentDay].some(inRange));
-    return ISchedule[currentDay].some(inRange);
+    return ISchedule[currentDay] && ISchedule[currentDay].some(inRange);
 }

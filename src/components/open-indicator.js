@@ -10,6 +10,10 @@ class OpenIndicator extends Component {
     }
 }
 
+OpenIndicator.defaultProps = {
+    schedule: {}
+}
+
 OpenIndicator.propTypes = {
     schedule: PropTypes.shape({}),
 };
