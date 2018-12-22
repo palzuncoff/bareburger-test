@@ -35,6 +35,15 @@ function getNextThisWeekWorkDay(nexWorkDay) {
     return moment({ hour: time[0], minute: time[1] }).format('LT');
 }
 
+function nextWorkTime(day) {
+    const time = day.find(time => {
+        const arrFrom = time.from.split(':');
+        return moment().isBefore(moment({ hour:arrFrom[0], minute:arrFrom[1] }))
+    })
+    const from = time.from.split(':')
+    return moment({ hour:from[0], minute:from[1] }).fromNow()
+}
+
 export function getHumanReadableSchedule(ISchedule) {
     const entries = Object.entries(ISchedule);
     if (entries.length < 1) return null;
@@ -77,8 +86,8 @@ export function getHumanReadableNextWorkingHours(ISchedule) {
             return DAYS.slice(dayIndex)
         };
         return restDays().reduce((acc, day, index, days) => {
-            if (ISchedule[DAYS[moment().day() - 1]]) {
-                console.log(ISchedule[day]);
+            if (ISchedule[days[0]]) {
+                acc = nextWorkTime(ISchedule[days[0]])
                 return acc;
             }
             if (ISchedule[days[1]]) {

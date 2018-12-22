@@ -37,4 +37,10 @@ describe('WhenOpen', () => {
             }});
         expect(component.text()).toEqual('On Friday ay 10:00 AM');
     })
+    it('should show In 1 hour and 20 min message', () => {
+        const component = setUp({ schedule: {
+                sat: [{ from: '10:00', to: '14:00' }, { from: '19:12', to: '23:00' }],
+            }});
+        expect(component.text()).toEqual('In 1 hour and 20 min');
+    })
 })
