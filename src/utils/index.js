@@ -30,8 +30,9 @@ function getTomorrowWorkHours(ISchedule) {
     return moment({ hour: time[0], minute: time[1] }).format('LT');
 }
 
-function getNextThisWeekWorkDay(ISchedule, restDays) {
-
+function getNextThisWeekWorkDay(nexWorkDay) {
+    const time = nexWorkDay[0].from.split(':');
+    return moment({ hour: time[0], minute: time[1] }).format('LT');
 }
 
 export function getHumanReadableSchedule(ISchedule) {
@@ -84,8 +85,9 @@ export function getHumanReadableNextWorkingHours(ISchedule) {
                 acc = `Tomorrow at ${getTomorrowWorkHours(ISchedule)}`;
                 return acc;
             }
-            if (false) {
-                acc = `On at ${getNextThisWeekWorkDay(ISchedule)}`;
+            const nexWorkDay = days.slice(2).find(day => ISchedule[day])
+            if (nexWorkDay) {
+                acc = `On ${DAYS_READABLE[nexWorkDay]} ay ${getNextThisWeekWorkDay(ISchedule[nexWorkDay])}`;
                 return acc;
             }
             acc = `Next week on ${getFirstWorkDay(ISchedule)}`;

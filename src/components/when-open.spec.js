@@ -30,5 +30,11 @@ describe('WhenOpen', () => {
                 sun: [{ from: '09:00', to: '23:00' }],
             }});
         expect(component.text()).toEqual('Tomorrow at 9:00 AM');
+    });
+    it('should show On Friday ay 10:00 AM message', () => {
+        const component = setUp({ schedule: {
+                fri: [{ from: '10:00', to: '23:00' }],
+            }});
+        expect(component.text()).toEqual('On Friday ay 10:00 AM');
     })
 })
