@@ -5,10 +5,12 @@ function scheduleHoursRange(day) {
     if (!day) {
         return 'not working'
     }
-    const [{from, to}] = day;
-    const arrFrom = from.split(':');
-    const arrTo = to.split(':');
-    return `${moment({ hour:arrFrom[0], minute:arrFrom[1] }).format('LT')} - ${moment({ hour:arrTo[0], minute:arrTo[1] }).format('LT')}`
+    return day.reduce((acc, item) => {
+        const { from, to } = item;
+        const arrFrom = from.split(':');
+        const arrTo = to.split(':');
+        return acc.concat(`${moment({ hour:arrFrom[0], minute:arrFrom[1] }).format('LT')} - ${moment({ hour:arrTo[0], minute:arrTo[1] }).format('LT')}`)
+    }, '')
 }
 
 function inRange({ from, to }) {
