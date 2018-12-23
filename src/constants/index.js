@@ -1,4 +1,5 @@
 export const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+export const FORMAT_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 export const DAYS_READABLE = {
     mon: 'Monday',
     tue: 'Tuesday',

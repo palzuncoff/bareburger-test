@@ -1,6 +1,18 @@
 import moment from 'moment';
 import { DAYS, DAYS_READABLE } from '../constants';
 
+moment.updateLocale("en", { week: {
+        dow: 1,
+        doy: 4
+    }});
+
+const currentDay = DAYS[moment().weekday()];
+
+const getEntries = obj => Object.entries(obj).sort((a, b) => {
+    if (DAYS.indexOf(a[0]) <  DAYS.indexOf(b[0])) return -1
+    if (DAYS.indexOf(a[0]) >  DAYS.indexOf(b[0])) return 1
+});
+
 function scheduleHoursRange(day) {
     if (!day) {
 
@@ -23,7 +35,7 @@ function inRange({ from, to }) {
 }
 
 function getFirstWorkDay(ISchedule) {
-    const entries = Object.entries(ISchedule);
+    const entries = getEntries(ISchedule);
     const dayName = DAYS_READABLE[entries[0][0]];
     const time = entries[0][1][0].from.split(':');
 
@@ -31,7 +43,7 @@ function getFirstWorkDay(ISchedule) {
 }
 
 function getTomorrowWorkHours(ISchedule) {
-    const day = ISchedule[DAYS[moment().day()]];
+    const day = ISchedule[DAYS[moment().weekday() + 1]];
     const time = day[0].from.split(':');
 
     return moment({ hour: time[0], minute: time[1] }).format('LT');
@@ -65,7 +77,7 @@ function nextWorkTime(time) {
 }
 
 export function getHumanReadableSchedule(ISchedule) {
-    const entries = Object.entries(ISchedule);
+    const entries = getEntries(ISchedule);
     if (entries.length < 1) return null;
     return DAYS.reduce((acc, dayId, index) => {
         const day = ISchedule[dayId];
@@ -81,7 +93,8 @@ export function getHumanReadableSchedule(ISchedule) {
             const indexB = lastResult.indexOf('-');
             let newString;
             if (indexB > 0 && indexB < indexA) {
-                const subString = lastResult.slice(indexB + 1, 3);
+                const subString = lastResult.slice(indexB + 1, 7);
+                console.log(subString);
                 newString = lastResult.replace(subString, dayId.toUpperCase())
             } else {
                 newString = lastResult.replace(' :', `-${dayId.toUpperCase()} :`)
@@ -98,15 +111,14 @@ export function getHumanReadableSchedule(ISchedule) {
 }
 
 export function isInWorkingHours(ISchedule) {
-    const currentDay = DAYS[moment().day() - 1];
-
+    console.log(moment().day());
     return ISchedule[currentDay] && ISchedule[currentDay].some(inRange);
 }
 
 export function getHumanReadableNextWorkingHours(ISchedule) {
     if (!isInWorkingHours(ISchedule)) {
         const restDays = () => {
-            const dayIndex = moment().day() - 1;
+            const dayIndex = moment().weekday();
 
             return DAYS.slice(dayIndex)
         };

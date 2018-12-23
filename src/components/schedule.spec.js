@@ -28,9 +28,8 @@ describe('Schedule', () => {
             tue: [{ from: '10:00', to: '23:00' }],
             wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
             thu: [{ from: '11:00', to: '23:00' }],
-            fri: [{ from: '12:00', to: '23:00' }],
         }});
-        expect(component.find('li').at(0).text()).toEqual('MON-TUE : 10:00 AM - 11:00 PM');
-        expect(component.find('li').last().text()).toEqual('SAT-SUN : not working');
+        expect(component.find('li').at(0).text()).toEqual('MON-TUE : 10:00 AM - 11:00 PM; ');
+        expect(component.find('li').last().text()).toEqual('FRI-SUN : not working:');
     });
 })
