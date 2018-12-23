@@ -18,7 +18,7 @@ describe('OpenIndicator', () => {
             sat: [{ from: '10:00', to: '23:00' }],
             sun: [{ from: '10:00', to: '23:00' }],
         }})
-        expect(component.text()).toEqual('open')
+        expect(component.text()).toEqual(' is open')
     });
     it('should show close', () => {
         const component = setUp({ schedule: {

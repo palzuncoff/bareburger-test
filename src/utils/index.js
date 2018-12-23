@@ -6,12 +6,18 @@ moment.updateLocale("en", { week: {
         doy: 4
     }});
 
-const currentDay = DAYS[moment().weekday()];
+const splitTime = time => time.split(':');
+
+const getWeekDay = (num = 0) => DAYS[moment().weekday() + num];
 
 const getEntries = obj => Object.entries(obj).sort((a, b) => {
-    if (DAYS.indexOf(a[0]) <  DAYS.indexOf(b[0])) return -1
-    if (DAYS.indexOf(a[0]) >  DAYS.indexOf(b[0])) return 1
+    if (DAYS.indexOf(a[0]) <  DAYS.indexOf(b[0])) return -1;
+    if (DAYS.indexOf(a[0]) >  DAYS.indexOf(b[0])) return 1;
+
+    return 0
 });
+
+const getTime = day => day.find(time => moment().isBefore(moment({ hour: splitTime(time.from)[0], minute: splitTime(time.from)[1] })));
 
 function scheduleHoursRange(day) {
     if (!day) {
@@ -20,49 +26,39 @@ function scheduleHoursRange(day) {
     }
     return day.reduce((acc, item) => {
         const { from, to } = item;
-        const arrFrom = from.split(':');
-        const arrTo = to.split(':');
 
-        return acc.concat(`${moment({ hour:arrFrom[0], minute:arrFrom[1] }).format('LT')} - ${moment({ hour:arrTo[0], minute:arrTo[1] }).format('LT')}; `)
+        return acc.concat(`${moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }).format('LT')} - ${moment({ hour:splitTime(to)[0], minute: splitTime(to)[1] }).format('LT')}; `)
     }, '')
 }
 
 function inRange({ from, to }) {
-    const arrFrom = from.split(':');
-    const arrTo = to.split(':');
 
-    return moment().isBetween(moment({ hour:arrFrom[0], minute:arrFrom[1] }), moment({ hour:arrTo[0], minute:arrTo[1] }));
+    return moment().isBetween(moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }), moment({ hour: splitTime(to)[0], minute: splitTime(to)[1] }));
 }
 
 function getFirstWorkDay(ISchedule) {
     const entries = getEntries(ISchedule);
     const dayName = DAYS_READABLE[entries[0][0]];
-    const time = entries[0][1][0].from.split(':');
+    const time = splitTime(entries[0][1][0].from);
 
     return `${dayName} at ${moment({ hour:time[0], minute:time[1] }).format('LT')}`
 }
 
 function getTomorrowWorkHours(ISchedule) {
-    const day = ISchedule[DAYS[moment().weekday() + 1]];
-    const time = day[0].from.split(':');
+    const day = ISchedule[getWeekDay(1)];
+    const time = splitTime(day[0].from);
 
     return moment({ hour: time[0], minute: time[1] }).format('LT');
 }
 
 function getNextThisWeekWorkDay(nexWorkDay) {
-    const time = nexWorkDay[0].from.split(':');
+    const time = splitTime(nexWorkDay[0].from);
 
     return moment({ hour: time[0], minute: time[1] }).format('LT');
 }
 
-const getTime = day => day.find(time => {
-    const arrFrom = time.from.split(':');
-
-    return moment().isBefore(moment({ hour:arrFrom[0], minute:arrFrom[1] }))
-});
-
 function nextWorkTime(time) {
-    const from = time.from.split(':');
+    const from = splitTime(time.from);
     const a = moment();
     const b = moment({ hour:from[0], minute:from[1] });
     const mins = b.diff(a, 'minutes');
@@ -94,7 +90,6 @@ export function getHumanReadableSchedule(ISchedule) {
             let newString;
             if (indexB > 0 && indexB < indexA) {
                 const subString = lastResult.slice(indexB + 1, 7);
-                console.log(subString);
                 newString = lastResult.replace(subString, dayId.toUpperCase())
             } else {
                 newString = lastResult.replace(' :', `-${dayId.toUpperCase()} :`)
@@ -111,8 +106,7 @@ export function getHumanReadableSchedule(ISchedule) {
 }
 
 export function isInWorkingHours(ISchedule) {
-    console.log(moment().day());
-    return ISchedule[currentDay] && ISchedule[currentDay].some(inRange);
+    return ISchedule[getWeekDay()] && ISchedule[getWeekDay()].some(inRange);
 }
 
 export function getHumanReadableNextWorkingHours(ISchedule) {

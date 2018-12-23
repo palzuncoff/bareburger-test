@@ -30,6 +30,6 @@ describe('Schedule', () => {
             thu: [{ from: '11:00', to: '23:00' }],
         }});
         expect(component.find('li').at(0).text()).toEqual('MON-TUE : 10:00 AM - 11:00 PM; ');
-        expect(component.find('li').last().text()).toEqual('FRI-SUN : not working:');
+        expect(component.find('li').last().text()).toEqual('FRI-SUN : not working;');
     });
 })
