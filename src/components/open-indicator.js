@@ -5,7 +5,7 @@ import { isInWorkingHours } from '../utils';
 class OpenIndicator extends Component {
     render() {
         return (
-            <span>{isInWorkingHours(this.props.schedule) ? 'open' : 'closed, will open '}</span>
+            <span>{isInWorkingHours(this.props.schedule) ? ' is open' : ' will open '}</span>
         );
     }
 }

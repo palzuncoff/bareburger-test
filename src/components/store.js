@@ -9,7 +9,10 @@ class Store extends Component {
         return (
             <div>
                 <h1>{this.props.name}</h1>
-                <div>Store is <OpenIndicator schedule={this.props.schedule}/> <WhenOpen schedule={this.props.schedule} /></div>
+                <div>Store
+                    <OpenIndicator schedule={this.props.schedule}/>
+                    <WhenOpen schedule={this.props.schedule} />
+                </div>
                 <ul>
                     {<Schedule schedule={this.props.schedule}/>}
                 </ul>
@@ -31,15 +34,7 @@ Store.defaultProps = {
 
 Store.propTypes = {
     name: PropTypes.string,
-    schedule: PropTypes.shape({
-        mon: PropTypes.arrayOf(PropTypes.shape({})),
-        tue: PropTypes.arrayOf(PropTypes.shape({})),
-        wed: PropTypes.arrayOf(PropTypes.shape({})),
-        thu: PropTypes.arrayOf(PropTypes.shape({})),
-        fri: PropTypes.arrayOf(PropTypes.shape({})),
-        sat: PropTypes.arrayOf(PropTypes.shape({})),
-        sun: PropTypes.arrayOf(PropTypes.shape({})),
-    })
+    schedule: PropTypes.shape({})
 };
 
 export default Store;
