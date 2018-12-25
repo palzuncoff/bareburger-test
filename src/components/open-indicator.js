@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isInWorkingHours } from '../utils';
+import { isInWorkingHours, convertSchedule } from '../utils';
 
 class OpenIndicator extends Component {
     render() {
         return (
-            <span>{isInWorkingHours(this.props.schedule) ? ' is open' : ' will open '}</span>
+            <span>{isInWorkingHours(convertSchedule(this.props.schedule, this.props.timeZone)) ? ' is open' : ' will open '}</span>
         );
     }
 }
@@ -16,6 +16,7 @@ OpenIndicator.defaultProps = {
 
 OpenIndicator.propTypes = {
     schedule: PropTypes.shape({}),
+    timeZone: PropTypes.string,
 };
 
 export default OpenIndicator;

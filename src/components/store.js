@@ -10,12 +10,11 @@ class Store extends Component {
             <div>
                 <h1>{this.props.name}</h1>
                 <div>Store
-                    <OpenIndicator schedule={this.props.schedule}/>
-                    <WhenOpen schedule={this.props.schedule} />
+                    <OpenIndicator schedule={this.props.schedule} timeZone={this.props.timeZone}/>
+                    <WhenOpen schedule={this.props.schedule} timeZone={this.props.timeZone}/>
                 </div>
-                <ul>
-                    {<Schedule schedule={this.props.schedule}/>}
-                </ul>
+                <Schedule schedule={this.props.schedule} timeZone={this.props.timeZone} />
+                <div>{this.props.timeZone}</div>
             </div>
         )
     }
@@ -34,7 +33,8 @@ Store.defaultProps = {
 
 Store.propTypes = {
     name: PropTypes.string,
-    schedule: PropTypes.shape({})
+    schedule: PropTypes.shape({}),
+    timeZone: PropTypes.string,
 };
 
 export default Store;

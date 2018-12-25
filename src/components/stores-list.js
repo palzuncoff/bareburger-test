@@ -20,6 +20,7 @@ class StoresList extends Component {
             key={store[0]}
             name={store[1].name}
             schedule={store[1].schedule}
+            timeZone={store[1].timeZone}
             />
         )
     };

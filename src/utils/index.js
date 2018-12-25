@@ -1,12 +1,101 @@
-import moment from 'moment';
-import { DAYS, DAYS_READABLE } from '../constants';
+import moment from 'moment-timezone';
+import { DAYS, DAYS_READABLE, CIRCLE, HOURS_CIRCLE, TIME_FORMAT } from '../constants';
 
 moment.updateLocale("en", { week: {
         dow: 1,
         doy: 4
     }});
 
+const tz = moment.tz.guess();
+
+const offSet = tz => moment.tz(tz).utcOffset();
+
+const localOffset = offSet(tz);
+
 const splitTime = time => time.split(':');
+
+const arrToMinutes = arrTime => +arrTime[1] + arrTime[0] * 60;
+
+const getAbsolute = num => Math.sqrt(Math.pow(num, 2));
+
+const getTimeObj = min => ({ h: min / 60 | 0, m: min % 60 | 0 });
+
+const getRestTime = (duration, time) => {
+    if (time < 0) return getTimeObj(duration + time);
+    if (time > CIRCLE * 2) return getTimeObj(time - (CIRCLE * 2));
+    return getTimeObj(time)
+}
+
+export function convertSchedule(ISchedule, storeTz) {
+    const diff = localOffset - offSet(storeTz);
+    return DAYS.reduce((acc, day, index, days) => {
+        const currentDay = ISchedule[day];
+        if (currentDay) {
+            const prevDay = days[index - 1];
+            const nextDay = days[index + 1];
+            currentDay.forEach(time => {
+                const from = splitTime(time.from);
+                const to = splitTime(time.to);
+                const minFrom = arrToMinutes(from) + diff;
+                const minTo = arrToMinutes(to) + diff;
+                const duration = arrToMinutes(to) - arrToMinutes(from);
+                const timeFromObj = getTimeObj(getAbsolute(minFrom));
+                const timeToObj = getTimeObj(getAbsolute(minTo));
+                if (minFrom < 0 && minTo < 0) {
+                    const formatHF = getAbsolute(timeFromObj.h - HOURS_CIRCLE) < TIME_FORMAT ? `0${getAbsolute(timeFromObj.h - HOURS_CIRCLE)}` : `${getAbsolute(timeFromObj.h - HOURS_CIRCLE)}`;
+                    const formatMF = timeFromObj.m < TIME_FORMAT ? `0${timeFromObj.m}` : `${timeFromObj.m}`;
+                    const formatHT = getAbsolute(timeToObj.h - HOURS_CIRCLE) < TIME_FORMAT ? `0${getAbsolute(timeToObj.h - HOURS_CIRCLE)}` : `${getAbsolute(timeToObj.h - HOURS_CIRCLE)}`;
+                    const formatMT = timeToObj.m < TIME_FORMAT ? `0${timeToObj.m}` : `${timeToObj.m}`;
+                    const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
+                    acc[prevDay] = Array.isArray(acc[prevDay]) ? [...acc[prevDay], time] : [time];
+                } else if (minFrom < 0 && minTo > 0) {
+                    const formatHF = getAbsolute(timeFromObj.h - HOURS_CIRCLE) < TIME_FORMAT ? `0${getAbsolute(timeFromObj.h - HOURS_CIRCLE)}` : `${getAbsolute(timeFromObj.h - HOURS_CIRCLE)}`;
+                    const formatMF = timeFromObj.m < TIME_FORMAT ? `0${timeFromObj.m}` : `${timeFromObj.m}`;
+                    const formatHT = '23';
+                    const formatMT = '59';
+                    const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
+                    acc[prevDay] = Array.isArray(acc[prevDay]) ? [...acc[prevDay], time] : [time];
+                    const nextDayHF = '00';
+                    const nextDayMF = '00';
+                    const nextDayHT = getRestTime(duration, minTo).h < TIME_FORMAT ? `0${getRestTime(duration, minTo).h}` : `${getRestTime(duration, minTo).h}`;
+                    const nextDayMT = getRestTime(duration, minTo).m < TIME_FORMAT ? `0${getRestTime(duration, minTo).m}` : `${getRestTime(duration, minTo).m}`;
+                    const nextDayTime = { from: `${nextDayHF}:${nextDayMF}`, to: `${nextDayHT}:${nextDayMT}`};
+                    acc[day] = Array.isArray(acc[day]) ? [...acc[day], nextDayTime] : [nextDayTime];
+                } else if (minFrom > CIRCLE && minTo > CIRCLE) {
+                    const formatHF = timeFromObj.h - HOURS_CIRCLE < TIME_FORMAT ? `0${timeFromObj.h - HOURS_CIRCLE}` : `${timeFromObj.h - HOURS_CIRCLE}`;
+                    const formatMF = timeFromObj.m < TIME_FORMAT ? `0${timeFromObj.m}` : `${timeFromObj.m}`;
+                    const formatHT = timeToObj.h - HOURS_CIRCLE < TIME_FORMAT ? `0${timeToObj.h - HOURS_CIRCLE}` : `${timeToObj.h - HOURS_CIRCLE}`;
+                    const formatMT = timeToObj.m < TIME_FORMAT ? `0${timeToObj.m}` : `${timeToObj.m}`;
+                    const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
+                    acc[nextDay] = Array.isArray(acc[nextDay]) ? [...acc[nextDay], time] : [time];
+                } else if (minFrom < CIRCLE && minTo > CIRCLE) {
+                    const formatHF = timeFromObj.h < TIME_FORMAT ? `0${timeFromObj.h}` : `${timeFromObj.h}`;
+                    const formatMF = timeFromObj.m < TIME_FORMAT ? `0${timeFromObj.m}` : `${timeFromObj.m}`;
+                    const formatHT = '23';
+                    const formatMT = '59';
+                    const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
+                    acc[day] = Array.isArray(acc[day]) ? [...acc[day], time] : [time];
+                    const nextDayHF = '00';
+                    const nextDayMF = '00';
+                    const nextDayHT = getRestTime(duration, minTo).h < TIME_FORMAT ? `0${getRestTime(duration, minTo).h}` : `${getRestTime(duration, minTo).h}`;
+                    const nextDayMT = getRestTime(duration, minTo).m < TIME_FORMAT ? `0${getRestTime(duration, minTo).m}` : `${getRestTime(duration, minTo).m}`;
+                    const nextDayTime = { from: `${nextDayHF}:${nextDayMF}`, to: `${nextDayHT}:${nextDayMT}`};
+                    acc[nextDay] = Array.isArray(acc[nextDay]) ? [...acc[nextDay], nextDayTime] : [nextDayTime];
+                } else {
+                    const formatHF = timeFromObj.h < TIME_FORMAT ? `0${timeFromObj.h}` : `${timeFromObj.h}`;
+                    const formatMF = timeFromObj.m < TIME_FORMAT ? `0${timeFromObj.m}` : `${timeFromObj.m}`;
+                    const formatHT = timeToObj.h < TIME_FORMAT ? `0${timeToObj.h}` : `${timeToObj.h}`;
+                    const formatMT = timeToObj.m < TIME_FORMAT ? `0${timeToObj.m}` : `${timeToObj.m}`;
+                    const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
+                    acc[day] = Array.isArray(acc[day]) ? [...acc[day], time] : [time];
+                }
+            });
+            return acc;
+        }
+
+        return acc;
+    }, {});
+}
 
 const getWeekDay = (num = 0) => DAYS[moment().weekday() + num];
 
@@ -66,7 +155,7 @@ function nextWorkTime(time) {
     const m = mins % 60 | 0;
     const res = ['In'];
     if (h > 0) res.push(`${h} hour`);
-    if (m > 0 && h > 0) res.push('end');
+    if (m > 0 && h > 0) res.push('and');
     if (m > 0) res.push(`${m} min`);
 
     return res.join(' ');

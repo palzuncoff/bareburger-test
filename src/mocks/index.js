@@ -1,5 +1,5 @@
 import stores from './stores';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 export function saveStoresToFB() {
     const storesRef = firebase.database().ref('/stores');

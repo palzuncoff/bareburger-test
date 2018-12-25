@@ -9,3 +9,6 @@ export const DAYS_READABLE = {
     sat: 'Saturday',
     sun: 'Sunday',
 };
+export const CIRCLE = 720;
+export const HOURS_CIRCLE = 24;
+export const TIME_FORMAT = 10

@@ -12,12 +12,8 @@ describe('OpenIndicator', () => {
     }
     it('should show open', () => {
         const component = setUp({ schedule: {
-            wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
-            thu: [{ from: '11:00', to: '23:00' }],
-            fri: [{ from: '12:00', to: '23:00' }],
-            sat: [{ from: '10:00', to: '23:00' }],
-            sun: [{ from: '10:00', to: '23:00' }],
-        }})
+            tue: [{ from: '01:04', to: '23:40' }],
+        }, timeZone: 'America/Los_Angeles' })
         expect(component.text()).toEqual(' is open')
     });
     it('should show close', () => {
