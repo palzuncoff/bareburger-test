@@ -13,23 +13,12 @@ class Store extends Component {
                     <OpenIndicator schedule={this.props.schedule} timeZone={this.props.timeZone}/>
                     <WhenOpen schedule={this.props.schedule} timeZone={this.props.timeZone}/>
                 </div>
-                <Schedule schedule={this.props.schedule} timeZone={this.props.timeZone} />
+                <Schedule schedule={this.props.schedule} />
                 <div>{this.props.timeZone}</div>
             </div>
         )
     }
 }
-
-Store.defaultProps = {
-    name: 'Aero Pops',
-    schedule: {
-        mon: [{ from: '10:00', to: '23:00' }],
-        tue: [{ from: '10:00', to: '23:00' }],
-        wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
-        thu: [{ from: '11:00', to: '23:00' }],
-        fri: [{ from: '12:00', to: '23:00' }],
-    },
-};
 
 Store.propTypes = {
     name: PropTypes.string,
