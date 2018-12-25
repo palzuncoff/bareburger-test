@@ -12,35 +12,34 @@ describe('WhenOpen', () => {
     }
     it('should show Next week on Monday at 10:00 AM message', () => {
         const component = setUp({ schedule: {
-                fri: [{ from: '12:00', to: '23:00' }],
                 mon: [{ from: '10:00', to: '23:00' }],
                 tue: [{ from: '10:00', to: '23:00' }],
                 wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
                 thu: [{ from: '11:00', to: '23:00' }],
-            }});
+            }, timeZone: 'America/Los_Angeles'});
         expect(component.text()).toEqual('Next week on Monday at 10:00 AM');
     })
     it('should show Tomorrow at 9:00 AM message', () => {
         const component = setUp({ schedule: {
-                mon: [{ from: '10:00', to: '23:00' }],
-                tue: [{ from: '10:00', to: '23:00' }],
+                // mon: [{ from: '10:00', to: '23:00' }],
+                tue: [{ from: '10:00', to: '21:00' }],
                 wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
                 thu: [{ from: '11:00', to: '23:00' }],
                 fri: [{ from: '12:00', to: '23:00' }],
                 sun: [{ from: '09:00', to: '23:00' }],
-            }});
+            }, timeZone: 'Europe/Chisinau'});
         expect(component.text()).toEqual('Tomorrow at 9:00 AM');
     });
     it('should show On Friday ay 10:00 AM message', () => {
         const component = setUp({ schedule: {
                 fri: [{ from: '10:00', to: '23:00' }],
-            }});
+            }, timeZone: 'Europe/Chisinau'});
         expect(component.text()).toEqual('On Friday ay 10:00 AM');
     })
     it('should show In 1 hour and 20 min message', () => {
         const component = setUp({ schedule: {
                 sun: [{ from: '12:39', to: '14:00' }, { from: '15:00', to: '23:00' }],
-            }});
+            }, timeZone: 'Europe/Chisinau'});
         expect(component.text()).toEqual('In 1 hour and 20 min');
     })
 })
