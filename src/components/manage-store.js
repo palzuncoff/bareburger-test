@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ManageSchedule from './manage-schedule';
+import { DEFAULT_TIME } from '../constants';
 
 class ManageStore extends Component {
     state = {
@@ -11,7 +12,9 @@ class ManageStore extends Component {
     };
 
     handleName = e => this.setState({ name: e.target.value });
+
     handleTimeZone = e => this.setState({ timeZone: e.target.value });
+
     handleTime = (val, day, index, option) => {
         this.setState({
             schedule: {
@@ -25,19 +28,26 @@ class ManageStore extends Component {
             }
         })
     };
+
     handleDay = day => {
         const { schedule } = this.state;
         if (!schedule[day]) {
             this.setState({
                 schedule: {
                     ...schedule,
-                    [day]: [{ from: '00', to: '23:59'}]
+                    [day]: [DEFAULT_TIME]
                 }
             })
         } else {
             delete schedule[day];
             this.setState({ schedule })
         }
+    };
+
+    handleNewTime = day => {
+        const { schedule } = this.state;
+        schedule[day].push(DEFAULT_TIME);
+        this.setState({ schedule })
     };
 
     getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> );
@@ -47,7 +57,12 @@ class ManageStore extends Component {
         return (
             <li style={{ paddingBottom: '20px', borderStyle: 'solid', width: '30%'}}>
                 <input onChange={this.handleName} value={name}/>
-                <ManageSchedule schedule={schedule} handleTime={this.handleTime} handleDay={this.handleDay}/>
+                <ManageSchedule
+                    schedule={schedule}
+                    handleTime={this.handleTime}
+                    handleDay={this.handleDay}
+                    handleNewTime={this.handleNewTime}
+                />
                 <select
                     onSelect={this.handleTimeZone}
                     name="time-zone"

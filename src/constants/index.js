@@ -11,4 +11,5 @@ export const DAYS_READABLE = {
 };
 export const CIRCLE = 1440;
 export const HOURS_CIRCLE = 24;
-export const TIME_FORMAT = 10
+export const TIME_FORMAT = 10;
+export const DEFAULT_TIME = { from: '00', to: '23:59'};

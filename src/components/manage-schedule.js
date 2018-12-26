@@ -7,6 +7,7 @@ class ManageSchedule extends Component {
         const val = e.target.value;
         this.props.handleTime(val, day, index, option)
     };
+
     renderTime = (timeArr, day) => {
         return timeArr && timeArr.map((time, i) => (
             <div key={`${i}-day`}>
@@ -23,6 +24,7 @@ class ManageSchedule extends Component {
             </div>
         ))
     };
+
     render() {
         const { schedule, handleDay } = this.props;
         return (
@@ -36,6 +38,7 @@ class ManageSchedule extends Component {
                                 {day}
                             </button>
                             {this.renderTime(schedule[day], day)}
+                            <button onClick={() => this.props.handleNewTime(day)}>add time</button>
                         </li>
                     )
                 )}
@@ -48,6 +51,7 @@ ManageSchedule.propTypes = {
     schedule: PropTypes.shape({}),
     handleTime: PropTypes.func,
     handleDay: PropTypes.func,
+    handleNewTime: PropTypes.func,
 };
 
 export default ManageSchedule;
