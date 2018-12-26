@@ -35,7 +35,7 @@ class ManageStore extends Component {
                 }
             })
         } else {
-            delete schedule[day]
+            delete schedule[day];
             this.setState({ schedule })
         }
     };
@@ -45,7 +45,7 @@ class ManageStore extends Component {
     render() {
         const { name, schedule, timeZone } = this.state;
         return (
-            <li>
+            <li style={{ paddingBottom: '20px', borderStyle: 'solid', width: '30%'}}>
                 <input onChange={this.handleName} value={name}/>
                 <ManageSchedule schedule={schedule} handleTime={this.handleTime} handleDay={this.handleDay}/>
                 <select
@@ -69,11 +69,11 @@ ManageStore.defaultProps = {
     schedule: {
         mon: [{ from: '10:00', to: '23:00' }],
         tue: [{ from: '10:00', to: '23:00' }],
-        wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
+        wed: [{ from: '09:00', to: '13:30' }],
         thu: [{ from: '11:00', to: '23:00' }],
         fri: [{ from: '12:00', to: '23:00' }],
     },
-    timeZone: 'Asia/Shanghai',
+    timeZone: 'Europe/Chisinau',
 };
 
 ManageStore.propTypes = {

@@ -28,7 +28,9 @@ class Admin extends Component {
     render() {
         return (
             <div>
+                <h1>Add New Store</h1>
                 <ManageStore />
+                <h1>Stores List</h1>
                 <ul>
                     {this.renderStoreList()}
                 </ul>
