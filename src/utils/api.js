@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 
 class ApiService {
-    fb = firebase
+    fb = firebase;
 
     fetchAllStores = () =>
         this.fb
@@ -17,11 +17,17 @@ class ApiService {
             .ref('stores')
             .push(store);
 
-    updateStore = (storeId, store) =>
+    updateStore = (id, store) =>
         this.fb
             .database()
-            .ref('stores/' + storeId)
+            .ref(`stores/${id}`)
             .set(store);
+
+    deleteStore = (id) =>
+        this.fb
+            .database()
+            .ref(`stores/${id}`)
+            .remove()
 }
 
 export default new ApiService()

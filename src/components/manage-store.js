@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ManageSchedule from './manage-schedule';
 import { DEFAULT_TIME } from '../constants';
+import api from '../utils/api'
+
+const getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> );
 
 class ManageStore extends Component {
     state = {
@@ -23,7 +26,7 @@ class ManageStore extends Component {
                     if (i === index) {
                         return {...time, [option]: val}
                     }
-                    
+
                     return time
                 })
             }
@@ -65,7 +68,13 @@ class ManageStore extends Component {
         this.setState({ schedule })
     };
 
-    getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> );
+    handleDeleteStore = id => api.deleteStore(id).catch(e => console.log(e));
+
+    handleSaveStore = id => {
+        if (id) return api.updateStore(id, this.state).catch(e => console.log(e));
+        console.log(this.state);
+        return api.addStore(this.state).catch(e => console.log(e));
+    };
 
     render() {
         const { name, schedule, timeZone } = this.state;
@@ -85,10 +94,10 @@ class ManageStore extends Component {
                     id="time-zone-select"
                     defaultValue={timeZone}
                 >
-                    {this.getTZOptions()}
+                    {getTZOptions()}
                 </select>
-                <button>Save</button>
-                {this.props.id && <button>Delete</button>}
+                <button onClick={() => this.handleSaveStore(this.props.id)} >Save</button>
+                {this.props.id && <button onClick={() => this.handleDeleteStore(this.props.id)}>Delete</button>}
             </li>
         );
     }
