@@ -38,7 +38,7 @@ describe('WhenOpen', () => {
     })
     it('should show In 1 hour and 20 min message', () => {
         const component = setUp({ schedule: {
-                sun: [{ from: '12:39', to: '14:00' }, { from: '15:00', to: '23:00' }],
+                wed: [{ from: '12:39', to: '14:00' }, { from: '22:00', to: '23:00' }],
             }, timeZone: 'Europe/Chisinau'});
         expect(component.text()).toEqual('In 1 hour and 20 min');
     })

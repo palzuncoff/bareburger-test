@@ -98,7 +98,8 @@ function nextWorkTime(time) {
     const h = mins / 60 | 0;
     const m = mins % 60 | 0;
     const res = ['In'];
-    if (h > 0) res.push(`${h} hour`);
+    if (h === 1) res.push(`${h} hour`);
+    if (h > 1) res.push(`${h} hours`);
     if (m > 0 && h > 0) res.push('and');
     if (m > 0) res.push(`${m} min`);
 
