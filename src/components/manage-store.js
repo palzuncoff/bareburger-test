@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ManageSchedule from './manage-schedule';
 import { DEFAULT_TIME } from '../constants';
-import api from '../utils/api'
+import { updateStore, removeStore } from '../utils/apiUtils'
 
 const getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> );
 
@@ -68,13 +68,9 @@ class ManageStore extends Component {
         this.setState({ schedule })
     };
 
-    handleDeleteStore = id => api.deleteStore(id).catch(e => console.log(e));
+    handleDeleteStore = id => removeStore(id).catch(e => console.log(e));
 
-    handleSaveStore = id => {
-        if (id) return api.updateStore(id, this.state).catch(e => console.log(e));
-        console.log(this.state);
-        return api.addStore(this.state).catch(e => console.log(e));
-    };
+    handleSaveStore = id => updateStore(id, this.state).catch(e => console.log(e));
 
     render() {
         const { name, schedule, timeZone } = this.state;

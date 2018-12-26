@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import api from "../utils/api";
+import { fetchStores } from "../utils/apiUtils";
 import ManageStore from './manage-store';
 
 class Admin extends Component {
@@ -8,7 +8,7 @@ class Admin extends Component {
         error: null,
     }
     componentDidMount() {
-        return api.fetchAllStores()
+        return fetchStores()
             .catch(e => this.setState({ error: e }))
             .then(res => {
                 const resArray = Object.entries(res)

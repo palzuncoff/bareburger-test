@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Store from './store';
-import api from '../utils/api';
+import { fetchStores } from "../utils/apiUtils";
 
 class StoresList extends Component {
     state = {
@@ -8,7 +8,7 @@ class StoresList extends Component {
         error: null,
     }
     componentDidMount() {
-        return api.fetchAllStores()
+        return fetchStores()
             .catch(e => this.setState({ error: e }))
             .then(res => {
                 const resArray = Object.entries(res)
