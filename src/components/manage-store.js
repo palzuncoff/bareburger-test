@@ -57,7 +57,7 @@ class ManageStore extends Component {
                     {this.getTZOptions()}
                 </select>
                 <button>Save</button>
-                <button>Delete</button>
+                {this.props.id && <button>Delete</button>}
             </li>
         );
     }
