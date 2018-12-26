@@ -28,6 +28,77 @@ const getRestTime = (duration, time) => {
 
 const returnTimeString = time => time < TIME_FORMAT ? `0${time}` : `${time}`;
 
+const getWeekDay = (num = 0) => DAYS[moment().weekday() + num];
+
+const getEntries = obj => Object.entries(obj).sort((a, b) => {
+    if (DAYS.indexOf(a[0]) <  DAYS.indexOf(b[0])) return -1;
+    if (DAYS.indexOf(a[0]) >  DAYS.indexOf(b[0])) return 1;
+
+    return 0
+});
+
+const getTime = day => day.find(time => (
+    moment().isBefore(moment({ hour: splitTime(time.from)[0], minute: splitTime(time.from)[1] })))
+);
+
+const inRange = ({ from, to }) => (
+    moment().isBetween(moment({
+        hour: splitTime(from)[0],
+        minute: splitTime(from)[1],
+    }), moment({
+        hour: splitTime(to)[0],
+        minute: splitTime(to)[1]
+    }))
+);
+
+function scheduleHoursRange(day) {
+    if (!day) {
+
+        return 'not working;'
+    }
+    return day.reduce((acc, item) => {
+        const { from, to } = item;
+
+        return acc.concat(`${moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }).format('LT')} - ${moment({ hour:splitTime(to)[0], minute: splitTime(to)[1] }).format('LT')}; `)
+    }, '')
+}
+
+function getFirstWorkDay(ISchedule) {
+    const entries = getEntries(ISchedule);
+    const dayName = DAYS_READABLE[entries[0][0]];
+    const time = splitTime(entries[0][1][0].from);
+
+    return `${dayName} at ${moment({ hour:time[0], minute:time[1] }).format('LT')}`
+}
+
+function getTomorrowWorkHours(ISchedule) {
+    const day = ISchedule[getWeekDay(1)];
+    const time = splitTime(day[0].from);
+
+    return moment({ hour: time[0], minute: time[1] }).format('LT');
+}
+
+function getNextThisWeekWorkDay(nexWorkDay) {
+    const time = splitTime(nexWorkDay[0].from);
+
+    return moment({ hour: time[0], minute: time[1] }).format('LT');
+}
+
+function nextWorkTime(time) {
+    const from = splitTime(time.from);
+    const a = moment();
+    const b = moment({ hour:from[0], minute:from[1] });
+    const mins = b.diff(a, 'minutes');
+    const h = mins / 60 | 0;
+    const m = mins % 60 | 0;
+    const res = ['In'];
+    if (h > 0) res.push(`${h} hour`);
+    if (m > 0 && h > 0) res.push('and');
+    if (m > 0) res.push(`${m} min`);
+
+    return res.join(' ');
+}
+
 export function convertSchedule(ISchedule, storeTz) {
     const diff = localOffset - offSet(storeTz);
     if (diff !== 0) {
@@ -122,69 +193,6 @@ export function convertSchedule(ISchedule, storeTz) {
     return ISchedule;
 }
 
-const getWeekDay = (num = 0) => DAYS[moment().weekday() + num];
-
-const getEntries = obj => Object.entries(obj).sort((a, b) => {
-    if (DAYS.indexOf(a[0]) <  DAYS.indexOf(b[0])) return -1;
-    if (DAYS.indexOf(a[0]) >  DAYS.indexOf(b[0])) return 1;
-
-    return 0
-});
-
-const getTime = day => day.find(time => moment().isBefore(moment({ hour: splitTime(time.from)[0], minute: splitTime(time.from)[1] })));
-
-function scheduleHoursRange(day) {
-    if (!day) {
-
-        return 'not working;'
-    }
-    return day.reduce((acc, item) => {
-        const { from, to } = item;
-
-        return acc.concat(`${moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }).format('LT')} - ${moment({ hour:splitTime(to)[0], minute: splitTime(to)[1] }).format('LT')}; `)
-    }, '')
-}
-
-function inRange({ from, to }) {
-
-    return moment().isBetween(moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }), moment({ hour: splitTime(to)[0], minute: splitTime(to)[1] }));
-}
-
-function getFirstWorkDay(ISchedule) {
-    const entries = getEntries(ISchedule);
-    const dayName = DAYS_READABLE[entries[0][0]];
-    const time = splitTime(entries[0][1][0].from);
-
-    return `${dayName} at ${moment({ hour:time[0], minute:time[1] }).format('LT')}`
-}
-
-function getTomorrowWorkHours(ISchedule) {
-    const day = ISchedule[getWeekDay(1)];
-    const time = splitTime(day[0].from);
-
-    return moment({ hour: time[0], minute: time[1] }).format('LT');
-}
-
-function getNextThisWeekWorkDay(nexWorkDay) {
-    const time = splitTime(nexWorkDay[0].from);
-
-    return moment({ hour: time[0], minute: time[1] }).format('LT');
-}
-
-function nextWorkTime(time) {
-    const from = splitTime(time.from);
-    const a = moment();
-    const b = moment({ hour:from[0], minute:from[1] });
-    const mins = b.diff(a, 'minutes');
-    const h = mins / 60 | 0;
-    const m = mins % 60 | 0;
-    const res = ['In'];
-    if (h > 0) res.push(`${h} hour`);
-    if (m > 0 && h > 0) res.push('and');
-    if (m > 0) res.push(`${m} min`);
-
-    return res.join(' ');
-}
 
 export function getHumanReadableSchedule(ISchedule) {
     const entries = getEntries(ISchedule);
