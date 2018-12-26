@@ -23,6 +23,7 @@ class ManageStore extends Component {
                     if (i === index) {
                         return {...time, [option]: val}
                     }
+                    
                     return time
                 })
             }
@@ -40,13 +41,27 @@ class ManageStore extends Component {
             })
         } else {
             delete schedule[day];
+
             this.setState({ schedule })
         }
     };
 
     handleNewTime = day => {
         const { schedule } = this.state;
+
         schedule[day].push(DEFAULT_TIME);
+
+        this.setState({ schedule })
+    };
+
+    handleRemoveTime = (day, index) => {
+        const { schedule } = this.state;
+        const filterDay = this.state.schedule[day].filter((_, i) => i !== index);
+
+        schedule[day] = filterDay;
+
+        if (filterDay.length < 1) delete schedule[day];
+
         this.setState({ schedule })
     };
 
@@ -55,13 +70,14 @@ class ManageStore extends Component {
     render() {
         const { name, schedule, timeZone } = this.state;
         return (
-            <li style={{ paddingBottom: '20px', borderStyle: 'solid', width: '30%'}}>
+            <li style={{ marginBottom: '20px', padding: '20px', borderStyle: 'solid', width: '630px'}}>
                 <input onChange={this.handleName} value={name}/>
                 <ManageSchedule
                     schedule={schedule}
                     handleTime={this.handleTime}
                     handleDay={this.handleDay}
                     handleNewTime={this.handleNewTime}
+                    handleRemoveTime={this.handleRemoveTime}
                 />
                 <select
                     onSelect={this.handleTimeZone}

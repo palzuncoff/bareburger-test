@@ -21,6 +21,7 @@ class ManageSchedule extends Component {
                     value={time.to}
                     onChange={e => this.handleOnTime(e, day, i, 'to')}
                 /></span>
+                <button onClick={() => this.props.handleRemoveTime(day, i)}>remove time</button>
             </div>
         ))
     };
@@ -52,6 +53,7 @@ ManageSchedule.propTypes = {
     handleTime: PropTypes.func,
     handleDay: PropTypes.func,
     handleNewTime: PropTypes.func,
+    handleRemoveTime: PropTypes.func,
 };
 
 export default ManageSchedule;
