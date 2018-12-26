@@ -52,12 +52,20 @@ const inRange = ({ from, to }) => (
 function scheduleHoursRange(day) {
     if (!day) {
 
-        return 'not working;'
+        return 'not working'
     }
-    return day.reduce((acc, item) => {
-        const { from, to } = item;
+    return day.reduce((acc, item, i, day) => {
+        const from = day[0].from;
+        const to = day[day.length - 1].to;
+        acc = `${moment({
+            hour: splitTime(from)[0],
+            minute: splitTime(from)[1]
+        }).format('hh:mm A')} - ${moment({
+            hour:splitTime(to)[0],
+            minute: splitTime(to)[1]
+        }).format('hh:mm A')} `;
 
-        return acc.concat(`${moment({ hour: splitTime(from)[0], minute: splitTime(from)[1] }).format('LT')} - ${moment({ hour:splitTime(to)[0], minute: splitTime(to)[1] }).format('LT')}; `)
+        return acc;
     }, '')
 }
 

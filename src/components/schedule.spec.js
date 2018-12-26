@@ -20,7 +20,7 @@ describe('Schedule', () => {
     });
     it('should handle one day without brakes', () => {
         const component = setUp({ schedule: { mon: [{ from: '10:00', to: '23:00' }] }});
-        expect(component.find('li').at(0).text()).toEqual('MON : 10:00 AM - 11:00 PM');
+        expect(component.find('li').at(0).text()).toEqual('MON : 10:00 AM - 11:00 PM ');
     });
     it('should handle 2 days in a row', () => {
         const component = setUp({ schedule: {
@@ -29,7 +29,13 @@ describe('Schedule', () => {
             wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
             thu: [{ from: '11:00', to: '23:00' }],
         }});
-        expect(component.find('li').at(0).text()).toEqual('MON-TUE : 10:00 AM - 11:00 PM; ');
-        expect(component.find('li').last().text()).toEqual('FRI-SUN : not working;');
+        expect(component.find('li').at(0).text()).toEqual('MON-TUE : 10:00 AM - 11:00 PM ');
+        expect(component.find('li').last().text()).toEqual('FRI-SUN : not working');
+    });
+    it('should show time duration', () => {
+        const component = setUp({ schedule: {
+            wed: [{ from: '09:00', to: '13:30' }, { from: '14:00', to: '22:00' }],
+        }});
+        expect(component.find('li').at(1).text()).toEqual('WED : 09:00 AM - 10:00 PM ');
     });
 })
