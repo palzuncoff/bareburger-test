@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 
 class ManageStore extends Component {
     state = {
@@ -11,11 +12,15 @@ class ManageStore extends Component {
     handleName = e => {
         this.setState({ name: e.target.value })
     };
+    getTZOptions = () => moment.tz.names().map(tz => <option value={tz}>{tz}</option> )
     render() {
         const { name, schedule, timeZone } = this.state;
         return (
             <li>
                 <input onChange={this.handleName} value={name}/>
+                <select name="time-zone" id="time-zone-select">
+                    {this.getTZOptions()}
+                </select>
                 <button>Save</button>
                 <button>Delete</button>
             </li>
