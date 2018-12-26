@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import { DAYS } from '../constants';
 import api from "../utils/api";
 import ManageStore from './manage-store';
-import Store from "./stores-list";
-
-const hours = Array(24).fill(null).map((_, i) => i < 10 ? `0${1}` : `${i}`);
-const minutes = Array(60).fill(null).map((_, i) => i < 10 ? `0${1}` : `${i}`);
 
 class Admin extends Component {
     state = {

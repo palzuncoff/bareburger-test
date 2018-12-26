@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import ManageSchedule from './manage-schedule';
 
 class ManageStore extends Component {
     state = {
@@ -9,16 +10,22 @@ class ManageStore extends Component {
         timeZone: this.props.timeZone,
     };
 
-    handleName = e => {
-        this.setState({ name: e.target.value })
-    };
-    getTZOptions = () => moment.tz.names().map(tz => <option value={tz}>{tz}</option> )
+    handleName = e => this.setState({ name: e.target.value });
+    handleTimeZone = e => this.setState({ timeZone: e.target.value })
+    getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> )
+
     render() {
         const { name, schedule, timeZone } = this.state;
         return (
             <li>
                 <input onChange={this.handleName} value={name}/>
-                <select name="time-zone" id="time-zone-select">
+                <ManageSchedule schedule={schedule} />
+                <select
+                    onSelect={this.handleTimeZone}
+                    name="time-zone"
+                    id="time-zone-select"
+                    defaultValue={timeZone}
+                >
                     {this.getTZOptions()}
                 </select>
                 <button>Save</button>
