@@ -25,6 +25,20 @@ class ManageStore extends Component {
             }
         })
     };
+    handleDay = day => {
+        const { schedule } = this.state;
+        if (!schedule[day]) {
+            this.setState({
+                schedule: {
+                    ...schedule,
+                    [day]: [{ from: '00', to: '23:59'}]
+                }
+            })
+        } else {
+            delete schedule[day]
+            this.setState({ schedule })
+        }
+    };
 
     getTZOptions = () => moment.tz.names().map(tz => <option key={tz} value={tz}>{tz}</option> );
 
@@ -33,7 +47,7 @@ class ManageStore extends Component {
         return (
             <li>
                 <input onChange={this.handleName} value={name}/>
-                <ManageSchedule schedule={schedule} handleTime={this.handleTime} />
+                <ManageSchedule schedule={schedule} handleTime={this.handleTime} handleDay={this.handleDay}/>
                 <select
                     onSelect={this.handleTimeZone}
                     name="time-zone"

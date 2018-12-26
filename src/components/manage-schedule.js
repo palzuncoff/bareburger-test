@@ -24,12 +24,17 @@ class ManageSchedule extends Component {
         ))
     };
     render() {
-        const { schedule } = this.props;
+        const { schedule, handleDay } = this.props;
         return (
             <ul>
                 {DAYS.map(day => (
                         <li key={day}>
-                            <button style={{ backgroundColor: schedule[day] ? 'gray' : 'white' }}>{day}</button>
+                            <button
+                                onClick={() => handleDay(day)}
+                                style={{ backgroundColor: schedule[day] ? 'gray' : 'white' }}
+                            >
+                                {day}
+                            </button>
                             {this.renderTime(schedule[day], day)}
                         </li>
                     )
@@ -42,6 +47,7 @@ class ManageSchedule extends Component {
 ManageSchedule.propTypes = {
     schedule: PropTypes.shape({}),
     handleTime: PropTypes.func,
+    handleDay: PropTypes.func,
 };
 
 export default ManageSchedule;
