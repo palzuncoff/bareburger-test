@@ -16,8 +16,6 @@ const splitTime = time => time.split(':');
 
 const arrToMinutes = arrTime => +arrTime[1] + arrTime[0] * 60;
 
-const getAbsolute = num => Math.sqrt(Math.pow(num, 2));
-
 const getTimeObj = min => ({ h: min / 60 | 0, m: min % 60 | 0 });
 
 const getRestTime = (duration, time) => {
@@ -113,19 +111,19 @@ export function convertSchedule(ISchedule, storeTz) {
                     const minFrom = arrToMinutes(from) + diff;
                     const minTo = arrToMinutes(to) + diff;
                     const duration = arrToMinutes(to) - arrToMinutes(from);
-                    const timeFromObj = getTimeObj(getAbsolute(minFrom));
-                    const timeToObj = getTimeObj(getAbsolute(minTo));
+                    const timeFromObj = getTimeObj(Math.abs(minFrom));
+                    const timeToObj = getTimeObj(Math.abs(minTo));
                     if (minFrom < 0 && minTo < 0) {
-                        const formatHF = returnTimeString(getAbsolute(timeFromObj.h - HOURS_CIRCLE));
+                        const formatHF = returnTimeString(Math.abs(timeFromObj.h - HOURS_CIRCLE));
                         const formatMF = returnTimeString(timeFromObj.m);
-                        const formatHT = returnTimeString(getAbsolute(timeToObj.h - HOURS_CIRCLE));
+                        const formatHT = returnTimeString(Math.abs(timeToObj.h - HOURS_CIRCLE));
                         const formatMT = returnTimeString(timeToObj.m);
                         const time = { from: `${formatHF}:${formatMF}`, to: `${formatHT}:${formatMT}`};
 
                         acc[prevDay] = Array.isArray(acc[prevDay]) ? [...acc[prevDay], time] : [time];
 
                     } else if (minTo === 0) {
-                        const formatHF = returnTimeString(getAbsolute(timeFromObj.h - HOURS_CIRCLE));
+                        const formatHF = returnTimeString(Math.abs(timeFromObj.h - HOURS_CIRCLE));
                         const formatMF = returnTimeString(timeFromObj.m);
                         const formatHT = '23';
                         const formatMT = '59';
@@ -134,7 +132,7 @@ export function convertSchedule(ISchedule, storeTz) {
                         acc[prevDay] = Array.isArray(acc[prevDay]) ? [...acc[prevDay], time] : [time];
 
                     } else if (minFrom < 0 && minTo > 0) {
-                        const formatHF = returnTimeString(getAbsolute(timeFromObj.h - HOURS_CIRCLE));
+                        const formatHF = returnTimeString(Math.abs(timeFromObj.h - HOURS_CIRCLE));
                         const formatMF = returnTimeString(timeFromObj.m);
                         const formatHT = '23';
                         const formatMT = '59';
