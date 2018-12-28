@@ -14,7 +14,7 @@ describe('OpenIndicator', () => {
         return mount(<OpenIndicator { ...props } />)
     }
     it('should show open', () => {
-        console.log(moment().format());
+        console.log(moment().format('ddd, hA'));
         const component = setUp({ schedule: {
             sat: [{ from: '03:00', to: '06:00' }],
         }, timeZone: 'Europe/Chisinau' })
