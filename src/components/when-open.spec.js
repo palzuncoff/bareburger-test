@@ -6,6 +6,8 @@ import WhenOpen from './when-open';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+Date.now = jest.fn(() => +process.env.REACT_APP_TEST_DATE);
+
 describe('WhenOpen', () => {
     function setUp(props) {
         return mount(<WhenOpen { ...props } />)

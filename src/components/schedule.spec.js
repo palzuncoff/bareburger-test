@@ -6,6 +6,8 @@ import Schedule from './schedule';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+Date.now = jest.fn(() => +process.env.REACT_APP_TEST_DATE);
+
 describe('Schedule', () => {
     function setUp(props) {
         return mount(<Schedule { ...props } />)

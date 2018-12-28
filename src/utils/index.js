@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import { DAYS, DAYS_READABLE, CIRCLE, HOURS_CIRCLE, TIME_FORMAT } from '../constants';
 
+
 moment.updateLocale("en", { week: {
         dow: 1,
         doy: 4
@@ -10,7 +11,7 @@ const tz = moment.tz.guess();
 
 const offSet = tz => moment.tz(tz).utcOffset();
 
-const localOffset = offSet(tz);
+const localOffset = process.env.REACT_APP_TEST_TIME_ZONE ? offSet(process.env.REACT_APP_TEST_TIME_ZONE) : offSet(tz);
 
 const splitTime = time => time.split(':');
 
