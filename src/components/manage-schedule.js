@@ -1,25 +1,23 @@
 import React, { Component} from 'react';
 import PropTypes from 'prop-types';
-import { DAYS } from '../constants';
+import { TimePicker } from 'antd';
+import moment from 'moment';
+import { DAYS, TIME_PICKER_FORMAT } from '../constants';
+import 'antd/dist/antd.css';
 
 class ManageSchedule extends Component {
-    handleOnTime = (e, day, index, option) => {
-        const val = e.target.value;
-        this.props.handleTime(val, day, index, option)
-    };
-
     renderTime = (timeArr, day) => {
         return timeArr && timeArr.map((time, i) => (
             <div key={`${i}-day`}>
-                <span>from: <input
-                    type="text"
-                    value={time.from}
-                    onChange={e => this.handleOnTime(e, day, i, 'from')}
+                <span>from: <TimePicker
+                    defaultValue={moment(`${time.from}`, TIME_PICKER_FORMAT)}
+                    format={TIME_PICKER_FORMAT}
+                    onChange={(_, time) => this.props.handleTime(time, day, i, 'from')}
                 /></span>
-                <span>to: <input
-                    type="text"
-                    value={time.to}
-                    onChange={e => this.handleOnTime(e, day, i, 'to')}
+                <span>to: <TimePicker
+                    defaultValue={moment(`${time.to}`, TIME_PICKER_FORMAT)}
+                    format={TIME_PICKER_FORMAT}
+                    onChange={(_, time) => this.props.handleTime(time, day, i, 'to')}
                 /></span>
                 <button onClick={() => this.props.handleRemoveTime(day, i)}>remove time</button>
             </div>
