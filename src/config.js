@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 
 export const appName = 'goparrot-a0fa4';
 
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: 'AIzaSyD6IoVgfmIaKNfV_BUq-pQFBV8AW0sJKgw',
     databaseURL: `https://${appName}.firebaseio.com`,
     projectId: appName,

@@ -6,8 +6,6 @@ import Schedule from './schedule';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-Date.now = jest.fn(() => +process.env.REACT_APP_TEST_DATE);
-
 describe('Schedule', () => {
     function setUp(props) {
         return mount(<Schedule { ...props } />)
@@ -40,4 +38,4 @@ describe('Schedule', () => {
         }});
         expect(component.find('li').at(1).text()).toEqual('WED : 09:00 AM - 10:00 PM ');
     });
-})
+});

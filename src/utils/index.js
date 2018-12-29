@@ -1,7 +1,6 @@
 import moment from 'moment-timezone';
 import { DAYS, DAYS_READABLE, CIRCLE, HOURS_CIRCLE, TIME_FORMAT } from '../constants';
 
-
 moment.updateLocale("en", { week: {
         dow: 1,
         doy: 4

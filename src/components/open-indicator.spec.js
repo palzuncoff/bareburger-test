@@ -3,7 +3,6 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import OpenIndicator from './open-indicator';
-import moment from "moment";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -14,9 +13,8 @@ describe('OpenIndicator', () => {
         return mount(<OpenIndicator { ...props } />)
     }
     it('should show open', () => {
-        console.log(moment().format('ddd, hA'));
         const component = setUp({ schedule: {
-            sat: [{ from: '03:00', to: '06:00' }],
+            fri: [{ from: '22:00', to: '23:59' }],
         }, timeZone: 'Europe/Chisinau' })
         expect(component.text()).toEqual(' is open')
     });
